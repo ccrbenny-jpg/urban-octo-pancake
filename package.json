@@ -1,0 +1,80 @@
+{
+  "name": "nexus-aof-games-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo pour 5 jeux mobiles AOF — Wax Sort, Ludo Connect, Awalé Masters, Savoir AOF, Frenezy Mbappé",
+  "engines": {
+    "node": "20.x",
+    "npm": ">=10.0.0"
+  },
+  "scripts": {
+    "_comment_install": "═══ INSTALLATION (par module — pas de workspaces) ═══",
+    "install:backend": "cd backend && npm install",
+    "install:game1": "cd apps/game1-wax-sort && npm install --legacy-peer-deps",
+    "install:game2": "cd apps/game2-ludo-connect && npm install --legacy-peer-deps",
+    "install:game3": "cd apps/game3-awale-masters && npm install --legacy-peer-deps",
+    "install:game4": "cd apps/game4-savoir-aof && npm install --legacy-peer-deps",
+    "install:game5": "cd apps/game5-frenezy-mbappe && npm install --legacy-peer-deps",
+    "install:all": "npm run install:backend && npm run install:game1 && npm run install:game2 && npm run install:game3 && npm run install:game4 && npm run install:game5",
+    "_comment_dev": "═══ DÉVELOPPEMENT ═══",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:game1": "cd apps/game1-wax-sort && npm start",
+    "dev:game2": "cd apps/game2-ludo-connect && npm start",
+    "dev:game3": "cd apps/game3-awale-masters && npm start",
+    "dev:game4": "cd apps/game4-savoir-aof && npm start",
+    "dev:game5": "cd apps/game5-frenezy-mbappe && npm start",
+    "_comment_build": "═══ BUILD PRODUCTION ═══",
+    "build:backend": "cd backend && npm run build",
+    "build:game1:preview": "cd apps/game1-wax-sort && npm run build:preview",
+    "build:game1:prod": "cd apps/game1-wax-sort && npm run build:prod",
+    "_comment_test": "═══ TESTS ═══",
+    "test:backend": "cd backend && npm test",
+    "test:routes": "bash backend/scripts/test-all-routes.sh",
+    "test:all": "npm run test:backend",
+    "_comment_clean": "═══ NETTOYAGE ═══",
+    "clean:backend": "rm -rf backend/node_modules backend/dist",
+    "clean:apps": "rm -rf apps/*/node_modules apps/*/.expo",
+    "clean:packages": "rm -rf packages/*/node_modules",
+    "clean:all": "npm run clean:backend && npm run clean:apps && npm run clean:packages",
+    "_comment_lint": "═══ QUALITÉ DE CODE ═══",
+    "lint:backend": "cd backend && npm run lint",
+    "_comment_db": "═══ BASE DE DONNÉES ═══",
+    "db:migrate": "echo '⚠️  Exécute manuellement backend/migrations/001_initial_schema.sql dans Supabase SQL Editor'",
+    "db:check": "echo '⚠️  Vérifie connexion : curl $RAILWAY_URL/health'"
+  },
+  "keywords": [
+    "expo",
+    "react-native",
+    "monorepo",
+    "aof",
+    "afrique-ouest",
+    "mobile-games",
+    "tecno-pop-5",
+    "android",
+    "supabase",
+    "railway"
+  ],
+  "author": "NEXUS Project",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ccrbenny-jpg/urban-octo-pancake.git"
+  },
+  "_nexus_metadata": {
+    "version": "1.0.0",
+    "session_actuelle": 1,
+    "fichiers_livres": 1,
+    "fichiers_total_session_1": 10,
+    "architecture": "monorepo-sans-workspaces",
+    "raison_pas_workspaces": "Conflits npm/Expo connus. Chaque app a son propre node_modules. Shared via file: protocol.",
+    "node_version_cible": "20.x",
+    "device_cible": "Tecno Pop 5 (Android 11 Go Edition, 2GB RAM)",
+    "decisions_immutables": {
+      "login_joueur": "hybride (device + password optionnel)",
+      "login_admin": "bcrypt obligatoire",
+      "agregateur_paiement_phase_2": "yengapay_unique",
+      "stack_mobile": "Expo SDK 52 + RN 0.76",
+      "backend_framework": "Express 5 uniquement"
+    }
+  }
+}

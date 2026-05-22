@@ -1,0 +1,20 @@
+# ════════════════════════════════════════════════
+# Nixpacks Configuration — Railway Deploy
+# Force Node.js 20 LTS (compatibilité absolue)
+# ════════════════════════════════════════════════
+
+[phases.setup]
+nixPkgs = ["nodejs_20", "npm-9_x"]
+
+[phases.install]
+cmds = ["npm ci --omit=dev=false"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "node dist/server.js"
+
+[variables]
+NODE_ENV = "production"
+NPM_CONFIG_PRODUCTION = "false"

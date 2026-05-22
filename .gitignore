@@ -1,0 +1,111 @@
+# ════════════════════════════════════════════════
+# Fichier  : /.gitignore
+# Module   : Monorepo racine
+# Fonction : Exclusions Git pour tout le projet
+# Notes    : Adapté Expo + Node + Railway + Codespaces
+# ════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────
+# Dépendances Node.js
+# ─────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ─────────────────────────────────────────────────
+# Builds & artefacts
+# ─────────────────────────────────────────────────
+dist/
+build/
+.expo/
+.expo-shared/
+*.tsbuildinfo
+
+# ─────────────────────────────────────────────────
+# EAS Build (Expo)
+# ─────────────────────────────────────────────────
+*.apk
+*.aab
+*.ipa
+*.app
+ios/Pods/
+ios/build/
+android/build/
+android/app/build/
+android/.gradle/
+
+# ⚠️ NE PAS IGNORER : package-lock.json (requis par EAS npm ci)
+# ⚠️ NE PAS IGNORER : eas.json
+
+# ─────────────────────────────────────────────────
+# Environnements & secrets
+# ─────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+backend/.env
+apps/*/.env
+*.pem
+*.key
+!*.example.pem
+!*.example.key
+
+# ─────────────────────────────────────────────────
+# IDE & éditeurs
+# ─────────────────────────────────────────────────
+.vscode/
+!.vscode/settings.json.example
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ─────────────────────────────────────────────────
+# Logs & temporaires
+# ─────────────────────────────────────────────────
+logs/
+*.log
+tmp/
+temp/
+.cache/
+
+# ─────────────────────────────────────────────────
+# Tests & coverage
+# ─────────────────────────────────────────────────
+coverage/
+.nyc_output/
+jest-coverage/
+*.lcov
+
+# ─────────────────────────────────────────────────
+# Railway / Deploy
+# ─────────────────────────────────────────────────
+.railway/
+
+# ─────────────────────────────────────────────────
+# GitHub Codespaces
+# ─────────────────────────────────────────────────
+.devcontainer/devcontainer.local.json
+
+# ─────────────────────────────────────────────────
+# Fichiers temporaires designer
+# ─────────────────────────────────────────────────
+*.psd
+*.ai
+*.sketch
+*.fig
+# Note : Les exports finaux PNG/SVG sont versionnés
+# Note : Les sources designer ne le sont PAS
+
+# ─────────────────────────────────────────────────
+# Système
+# ─────────────────────────────────────────────────
+.history/
+.fleet/
