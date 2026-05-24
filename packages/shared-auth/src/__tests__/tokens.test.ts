@@ -18,21 +18,7 @@ const mockSecureStore = {
 };
 jest.mock('expo-secure-store', () => mockSecureStore);
 
-// 🔒 SECURITY : Mock de jose pour contrôler le décodage JWT
-jest.mock('jose', () => ({
-  decodeJwt: jest.fn((token: string) => {
-    // Implémentation simple pour les tests
-    const parts = token.split('.');
-    if (parts.length !== 3) throw new Error('Invalid JWT');
-    try {
-      return JSON.parse(
-        Buffer.from(parts[1], 'base64url').toString('utf-8')
-      );
-    } catch {
-      throw new Error('Invalid payload');
-    }
-  }),
-}));
+
 
 import {
   saveTokens,
@@ -231,6 +217,7 @@ describe('decodeToken', () => {
       username: 'mamadou',
       role: 'player',
       exp: Math.floor(nowMs() / 1000) + 900,
+      iat: Math.floor(nowMs() / 1000),
     });
 
     const payload = decodeToken(jwt);

@@ -8,7 +8,7 @@
 // ════════════════════════════════════════════════════════════
 
 import * as SecureStore from 'expo-secure-store';
-
+import { decodeJwt } from 'jose';
 import type { AuthTokens, JWTPayload } from './types';
 
 // 🔒 SECURITY : Clés de stockage SecureStore
@@ -92,77 +92,14 @@ export async function clearTokens(): Promise<void> {
 
 /**
  * ⚡ PERF : Décode un JWT localement SANS vérifier la signature.
- *
  * 🔒 SECURITY : La vérification de signature est FAITE CÔTÉ BACKEND uniquement.
- *    Cette fonction sert UNIQUEMENT à lire le payload côté client pour :
- *    - Afficher username/role dans l'UI
- *    - Anticiper l'expiration avant un appel API
- *    - Décisions UI rapides (afficher/masquer bouton admin)
- *
- * ⚠️ Décodage manuel base64url — pas de dépendance externe.
- *    Évite jose (ESM-only, problèmes Jest) et alourdissement APK.
- *
- * @param token - JWT au format "header.payload.signature"
- * @returns Payload typé JWTPayload ou null si invalide/corrompu
- *
- * @example
- *   const payload = decodeToken(accessToken);
- *   if (payload?.role === 'admin') showAdminButton();
  */
 export function decodeToken(token: string): JWTPayload | null {
   try {
-    // 🚨 PRS : Validation stricte du format avant tout traitement
-    if (!token || typeof token !== 'string') {
-      return null;
-    }
-
-    // JWT = header.payload.signature → exactement 3 segments
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-      return null;
-    }
-
-    const payloadBase64Url = parts[1];
-    if (!payloadBase64Url) {
-      return null;
-    }
-
-    // Conversion base64url → base64 standard
-    // (JWT utilise base64url : remplace +/= par -_ sans padding)
-    const base64 = payloadBase64Url
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
-
-    // Ajout du padding manquant (longueur multiple de 4)
-    const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
-
-    // Décodage base64 → JSON string → objet
-    // Note : Buffer fonctionne dans Node (tests Jest) ET dans React Native
-    //        car expo polyfill Buffer automatiquement.
-    const jsonString = Buffer.from(padded, 'base64').toString('utf-8');
-    const payload = JSON.parse(jsonString);
-
-    // 🔒 SECURITY : Validation stricte des champs attendus
-    // Un JWT mal formé ou trafiqué retourne null (jamais d'objet partiel)
-    if (
-      typeof payload.sub !== 'string' ||
-      typeof payload.username !== 'string' ||
-      typeof payload.role !== 'string' ||
-      typeof payload.exp !== 'number' ||
-      typeof payload.iat !== 'number'
-    ) {
-      return null;
-    }
-
-    // 🔒 SECURITY : Validation whitelist du rôle
-    if (payload.role !== 'player' && payload.role !== 'admin') {
-      return null;
-    }
-
-    return payload as JWTPayload;
-  } catch {
-    // Toute exception (JSON malformé, base64 invalide, etc.) → null silencieux
-    // Pas de console.warn ici car les tests simulent des cas invalides
+    const payload = decodeJwt(token) as JWTPayload;
+    return payload;
+  } catch (error) {
+    console.warn('[tokens] Failed to decode JWT:', error);
     return null;
   }
 }
